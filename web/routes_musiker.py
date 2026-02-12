@@ -11,6 +11,7 @@ from flask import (
 from flask_login import login_required, current_user
 
 from .models import db, GeneratedPlan, IndividualPlan
+from .converter import docx_to_pdf
 
 musiker_bp = Blueprint("musiker", __name__, url_prefix="/musiker")
 
@@ -74,14 +75,22 @@ def musician_detail(plan_id):
 @musiker_bp.route("/<int:plan_id>/individual.pdf")
 @musiker_or_admin_required
 def download_individual_pdf(plan_id):
-    """Individuellen Dienstplan als PDF herunterladen."""
+    """Individuellen Dienstplan als PDF herunterladen (on-demand Konvertierung)."""
     ind_plan = IndividualPlan.query.get_or_404(plan_id)
 
-    if not ind_plan.pdf_data:
-        flash("Keine PDF-Datei vorhanden.", "error")
+    if not ind_plan.docx_data:
+        flash("Kein Dienstplan vorhanden.", "error")
         return redirect(url_for("musiker.musician_detail", plan_id=plan_id))
 
-    # Dateiname: "Dienstplan Nachname Vorname.pdf"
+    # On-demand PDF konvertieren und cachen
+    if not ind_plan.pdf_data:
+        pdf_data = docx_to_pdf(ind_plan.docx_data)
+        if not pdf_data:
+            flash("PDF-Konvertierung fehlgeschlagen.", "error")
+            return redirect(url_for("musiker.musician_detail", plan_id=plan_id))
+        ind_plan.pdf_data = pdf_data
+        db.session.commit()
+
     filename = f"Dienstplan {ind_plan.display_name}.pdf"
 
     return send_file(
@@ -95,13 +104,22 @@ def download_individual_pdf(plan_id):
 @musiker_bp.route("/<int:plan_id>/collective.pdf")
 @musiker_or_admin_required
 def download_collective_pdf(plan_id):
-    """Kollektiven Dienstplan als PDF herunterladen."""
+    """Kollektiven Dienstplan als PDF herunterladen (on-demand Konvertierung)."""
     ind_plan = IndividualPlan.query.get_or_404(plan_id)
     gen_plan = ind_plan.generated_plan
 
-    if not gen_plan.collective_pdf:
-        flash("Keine PDF-Datei vorhanden.", "error")
+    if not gen_plan.collective_docx:
+        flash("Kein Dienstplan vorhanden.", "error")
         return redirect(url_for("musiker.musician_detail", plan_id=plan_id))
+
+    # On-demand PDF konvertieren und cachen
+    if not gen_plan.collective_pdf:
+        pdf_data = docx_to_pdf(gen_plan.collective_docx)
+        if not pdf_data:
+            flash("PDF-Konvertierung fehlgeschlagen.", "error")
+            return redirect(url_for("musiker.musician_detail", plan_id=plan_id))
+        gen_plan.collective_pdf = pdf_data
+        db.session.commit()
 
     month_range = f"{gen_plan.plan_start.strftime('%m')}-{gen_plan.plan_end.strftime('%m')}"
     filename = f"Dienstplan {gen_plan.plan_start.year} {month_range}.pdf"

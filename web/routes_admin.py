@@ -108,15 +108,10 @@ def generate():
             # Generator ausfuehren
             result = run_generator(filepath, start_date, end_date, year=year)
 
-            # Kollektiver Plan speichern
+            # Kollektiver Plan speichern (nur DOCX — PDF on-demand)
             plan_entry.collective_docx = result["collective_docx"]
 
-            # PDF konvertieren (falls LibreOffice vorhanden)
-            pdf_data = docx_to_pdf(result["collective_docx"])
-            if pdf_data:
-                plan_entry.collective_pdf = pdf_data
-
-            # Individuelle Plaene speichern
+            # Individuelle Plaene speichern (nur DOCX — PDF on-demand)
             for ip in result["individual_plans"]:
                 ind = IndividualPlan(
                     generated_plan_id=plan_entry.id,
@@ -125,12 +120,6 @@ def generate():
                     is_vakant=ip["is_vakant"],
                     docx_data=ip["docx"],
                 )
-
-                # PDF konvertieren
-                ind_pdf = docx_to_pdf(ip["docx"])
-                if ind_pdf:
-                    ind.pdf_data = ind_pdf
-
                 db.session.add(ind)
 
             plan_entry.status = "ready"
@@ -185,11 +174,21 @@ def download_collective_docx(plan_id):
 @admin_bp.route("/download/<int:plan_id>/collective-pdf")
 @admin_required
 def download_collective_pdf(plan_id):
-    """Kollektiven Dienstplan als PDF herunterladen."""
+    """Kollektiven Dienstplan als PDF herunterladen (on-demand Konvertierung)."""
     plan = GeneratedPlan.query.get_or_404(plan_id)
-    if not plan.collective_pdf:
-        flash("Keine PDF-Datei vorhanden. LibreOffice nicht installiert?", "error")
+
+    if not plan.collective_docx:
+        flash("Kein Dienstplan vorhanden.", "error")
         return redirect(url_for("admin.dashboard"))
+
+    # On-demand PDF konvertieren und cachen
+    if not plan.collective_pdf:
+        pdf_data = docx_to_pdf(plan.collective_docx)
+        if not pdf_data:
+            flash("PDF-Konvertierung fehlgeschlagen.", "error")
+            return redirect(url_for("admin.dashboard"))
+        plan.collective_pdf = pdf_data
+        db.session.commit()
 
     month_range = f"{plan.plan_start.strftime('%m')}-{plan.plan_end.strftime('%m')}"
     filename = f"Dienstplan {plan.plan_start.year} {month_range}.pdf"
