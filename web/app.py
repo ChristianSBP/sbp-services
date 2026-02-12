@@ -45,6 +45,11 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(musiker_bp)
 
+    # Health-Check fuer Render
+    @app.route("/healthz")
+    def healthz():
+        return "ok", 200
+
     # Root-Route
     @app.route("/")
     def index():

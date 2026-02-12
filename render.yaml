@@ -3,6 +3,7 @@ services:
     name: sbp-services
     runtime: docker
     plan: free
+    healthCheckPath: /healthz
     envVars:
       - key: SECRET_KEY
         generateValue: true
