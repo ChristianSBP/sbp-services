@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Dienstplaene — SBP Services{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Dienstplaene</h1>
+        {% if latest_plan %}
+        <p class="subtitle">
+            {{ latest_plan.plan_start.strftime('%d.%m.') }} &ndash; {{ latest_plan.plan_end.strftime('%d.%m.%Y') }}
+        </p>
+        {% else %}
+        <p class="subtitle">Noch keine Dienstplaene verfuegbar.</p>
+        {% endif %}
+    </div>
+
+    {% if musicians %}
+    <!-- Buchstaben-Navigation -->
+    <div class="letter-nav">
+        {% set ns = namespace(letters=[]) %}
+        {% for m in musicians %}
+            {% if not m.is_vakant %}
+                {% set letter = m.musician_name.split()[-1][0] | upper %}
+                {% if letter not in ns.letters %}
+                    {% set ns.letters = ns.letters + [letter] %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% for letter in ns.letters | sort %}
+        <a href="#letter-{{ letter }}" class="letter-link">{{ letter }}</a>
+        {% endfor %}
+        {% if musicians | selectattr('is_vakant') | list %}
+        <a href="#letter-vakant" class="letter-link letter-vakant">Vakant</a>
+        {% endif %}
+    </div>
+
+    <!-- Musiker-Liste -->
+    <div class="musician-list">
+        {% set ns = namespace(current_letter='') %}
+
+        {% for m in musicians %}
+        {% if not m.is_vakant %}
+            {% set letter = m.musician_name.split()[-1][0] | upper %}
+            {% if letter != ns.current_letter %}
+                {% set ns.current_letter = letter %}
+                <div class="letter-heading" id="letter-{{ letter }}">{{ letter }}</div>
+            {% endif %}
+
+            <a href="{{ url_for('musiker.musician_detail', plan_id=m.id) }}" class="musician-card">
+                <div class="musician-info">
+                    <span class="musician-name">{{ m.musician_name.split()[-1] }}, {{ m.musician_name.split()[:-1] | join(' ') }}</span>
+                    <span class="musician-position">{{ m.position }}</span>
+                </div>
+                <span class="card-arrow">&rsaquo;</span>
+            </a>
+        {% endif %}
+        {% endfor %}
+
+        <!-- Vakante Stellen -->
+        {% set vakant_list = musicians | selectattr('is_vakant') | list %}
+        {% if vakant_list %}
+        <div class="letter-heading" id="letter-vakant">Vakante Stellen</div>
+        {% for m in vakant_list %}
+        <a href="{{ url_for('musiker.musician_detail', plan_id=m.id) }}" class="musician-card musician-vakant">
+            <div class="musician-info">
+                <span class="musician-name">{{ m.position }}</span>
+                <span class="musician-position">vakant</span>
+            </div>
+            <span class="card-arrow">&rsaquo;</span>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#127925;</div>
+        <p>Noch keine Dienstplaene vorhanden.</p>
+        <p class="text-secondary">Der Administrator muss zuerst einen Dienstplan generieren.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Admin — SBP Services{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Administration</h1>
+        <p class="subtitle">Saechsische Blaeserphilharmonie</p>
+    </div>
+
+    <div class="card-grid">
+        <!-- Dienstplan Generator -->
+        <div class="card card-action">
+            <div class="card-icon">&#9776;</div>
+            <h2>Dienstplangenerator</h2>
+            {% if latest_plan %}
+            <p class="card-info">
+                Letzter Plan: {{ latest_plan.plan_start.strftime('%d.%m.') }} &ndash; {{ latest_plan.plan_end.strftime('%d.%m.%Y') }}
+                <br>
+                <span class="text-secondary">{{ latest_plan.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+            </p>
+            <div class="card-actions">
+                <a href="{{ url_for('admin.download_collective_docx', plan_id=latest_plan.id) }}" class="btn btn-secondary btn-small">Word herunterladen</a>
+                {% if latest_plan.collective_pdf %}
+                <a href="{{ url_for('admin.download_collective_pdf', plan_id=latest_plan.id) }}" class="btn btn-secondary btn-small">PDF herunterladen</a>
+                {% endif %}
+            </div>
+            {% else %}
+            <p class="card-info text-secondary">Noch kein Dienstplan generiert.</p>
+            {% endif %}
+            <a href="{{ url_for('admin.generate') }}" class="btn btn-primary">Neuen Plan generieren</a>
+        </div>
+
+        <!-- Musiker-Zugang -->
+        <div class="card">
+            <div class="card-icon">&#128274;</div>
+            <h2>Musiker-Zugang</h2>
+            {% if has_musiker_pw %}
+            <p class="card-info status-active">Passwort ist gesetzt</p>
+            {% else %}
+            <p class="card-info status-inactive">Kein Passwort gesetzt</p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('admin.set_musiker_password') }}" class="inline-form">
+                <div class="form-group">
+                    <input type="password" name="musiker_password" placeholder="Neues Musiker-Passwort" minlength="4" required>
+                </div>
+                <button type="submit" class="btn btn-secondary">Passwort setzen</button>
+            </form>
+        </div>
+
+        <!-- Musiker-Bereich Vorschau -->
+        <div class="card">
+            <div class="card-icon">&#127925;</div>
+            <h2>Musiker-Bereich</h2>
+            <p class="card-info text-secondary">
+                {% if latest_plan %}
+                {{ latest_plan.individual_plans | length }} Einzelplaene verfuegbar
+                {% else %}
+                Noch keine Plaene vorhanden
+                {% endif %}
+            </p>
+            <a href="{{ url_for('musiker.dashboard') }}" class="btn btn-secondary">Musiker-Ansicht oeffnen</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

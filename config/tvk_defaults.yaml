@@ -1,0 +1,181 @@
+# TVK - Tarifvertrag für die Musiker in Kulturorchestern
+# Durchgeschriebene Fassung vom 1. September 2023
+# Parameter konfigurierbar für Haustarifverträge
+
+tvk:
+  dienste:
+    max_per_week: 8                       # §15 Abs. 2: max 8 Dienste pro Woche (Mo-So)
+    max_per_day: 2                        # Max 2 Dienste pro Tag
+    doppeldienst_threshold_minutes: 195   # >3h15m Aufführung = Doppeldienst (2 Dienste)
+
+  ruhezeiten:
+    taegliche_ruhezeit_hours: 11          # §5 ArbZG: 11h Ruhezeit
+    zwischen_diensten_gleicher_tag_minutes: 90  # 1,5h Pause zwischen Diensten am gleichen Tag
+    vor_auffuehrung_hours: 5              # §13: 5h Ruhe vor Aufführung
+    nach_hauptprobe_hours: 4              # §13: 4h Ruhe nach Haupt-/Generalprobe
+
+  timing:
+    fruehester_probenbeginn: "09:30"
+    spaetestes_probenende: "22:00"
+
+  freie_tage:
+    min_free_days_per_week: 1             # §16 Abs. 1: min 1 freier Tag/Woche
+    free_sundays_per_spielzeit_half: 8    # §16 Abs. 5: 8 freie Sonntage pro Spielzeit-Halbjahr
+
+  probe_dauer:
+    ohne_buehne_max_minutes: 150          # §12: 2,5h
+    mit_buehne_max_minutes: 180           # §12: 3h
+
+  # Sächsische Bläserphilharmonie spezifisch
+  orchester:
+    name: "Sächsische Bläserphilharmonie"
+    bundesland: "SN"                      # Sachsen - für Feiertagsberechnung
+    spielzeit_start_month: 9              # September
+    spielzeit_end_month: 7                # Juli
+    home_venue: "DBA"                     # Deutsche Bläserakademie
+
+# 5. Haustarifvertrag der Sächsischen Bläserphilharmonie
+# vom 04.12.2025 (baut auf TVK auf, mit Abweichungen)
+htv:
+  active: true                            # HTV-Modus aktivieren
+
+  dienste:
+    max_per_week: 10                      # HTV: max 10 Dienste/Woche (statt TVK 8)
+    max_per_week_with_akademie: 12        # Bis 12 bei Akademiediensten
+    max_per_day: 2                        # Unverändert
+
+  eskalation:
+    trigger_threshold: 10                 # >10 Dienste in einer Woche...
+    reduced_max_next_week: 9              # ...nächste Woche max 9
+
+  ausgleichszeitraum:
+    weeks: 24                             # 24-Wochen-Ausgleichszeitraum
+    max_dienste: 183                      # Max 183 Dienste in 24 Wochen
+    transfer_dienste: 9                   # §12,2: Bis zu 9 Dienste übertragbar zwischen Perioden
+    period_1_start: "2025-08-18"          # 1. Montag nach Konzertferien 2025 (Spielzeit 2025/26)
+
+  kinderkonzerte:
+    identical_back_to_back_max_minutes: 180  # Identische Doppelvorstellungen <3h...
+    identical_back_to_back_dienst_count: 1.0 # ...zählen als 1 Dienst
+
+  akademiedienst:
+    tier_1_max_hours: 3                   # 1-3h = 1 Dienst
+    tier_1_dienste: 1.0
+    tier_2_max_hours: 6                   # 3-6h = 2 Dienste
+    tier_2_dienste: 2.0
+    tier_3_dienste: 3.0                   # 6+ Stunden = 3 Dienste
+
+  reise:
+    hours_per_free_day: 8                 # 8h Reisezeit = 1 freier Ausgleichstag
+
+  doppeldienst:
+    max_combined_minutes: 270             # 2 Proben kombiniert max 4,5h
+
+# Dienste-Berechnungsregeln (abgeleitet aus bestehendem Dienstplan)
+dienst_berechnung:
+  # Zeitbasierte Regeln
+  probe_kurz_max_minutes: 180            # Probe ≤3h = 1 Dienst
+  probe_lang_min_minutes: 181            # Probe >3h = 2 Dienste
+
+  # Typ-basierte Regeln
+  konzert_einzeln: 1.0                   # Einzelkonzert = 1 Dienst
+  anspielprobe_plus_konzert: 1.5         # Anspielprobe + Konzert gleicher Tag
+  schuelerkonzert_doppel: 1.5            # 2 Schülerkonzerte (Standard-TVK)
+  dirigierkurs_ganztag: 2.0              # Dirigierkurs ganztags
+  podcast_aufnahme: 2.0                  # Podcast-Aufnahme ganztags
+
+  # Reise
+  reise_dienste: 1.0                     # HTV: Reisetag = 1 Dienst (Protokollnotiz 3)
+  reisezeitausgleich_dienste: 0.0        # Ausgleichstage = keine Dienste
+
+# Datumskorrekturen: Überschreiben von Jahresplan-Einträgen
+# (z.B. wenn Jahresplan falsche Info enthält)
+date_corrections:
+  "2026-04-06":
+    override_text: "Ansp. 16:00-16:30 + Carnegie Hall, New York ca. 22:00 - Konzert"
+    note: "Jahresplan hat 'Rückflug nach Leipzig', korrekt ist Carnegie Hall Konzert"
+  "2026-04-07":
+    override_text: "Rückflug New York - Leipzig"
+    note: "Rückflug ist am 7.4., nicht am 6.4."
+  "2026-05-09":
+    add_events:
+      - "13:45-14:05 BLQ Umrahmung Mitgliederversammlung"
+      - "15:00-15:20 BLQ Marktfest Bad Lausick"
+    note: "BLQ-Dienste ergänzt (nicht im Jahresplan)"
+
+# Keywords für Nicht-Orchester-Events (werden komplett ausgefiltert)
+exclude_keywords:
+  - "Stadtmusik"
+  - "Mitgliederversammlung"
+  - "Mietgliederversammlung"    # Tippfehler im Jahresplan
+  - "OSTINATO"
+  - "Überregionaler"
+
+# Orte mit vollständigen Adressen
+venue_addresses:
+  GWH: "Gewandhaus zu Leipzig"
+  DBA: "Deutsche Bläserakademie, Bad Lausick"
+  "Bad Lausick": "Deutsche Bläserakademie, Bad Lausick"
+  "Trebsen": "Schloss Trebsen"
+  "Carnegie Hall": "Carnegie Hall, New York"
+  "Markkleeberg": "Markkleeberg"
+  "Leipzig": "Leipzig"
+  "Innsbruck": "Innsbruck"
+  "Berlin": "Berlin"
+  "Dresden": "Dresden"
+  "New York": "New York"
+
+# Kleidung-Zuordnungsregeln
+kleidung_rules:
+  premiere_abo: "Frack"
+  repeat_abo: "Schw. Anzug/weißes Hemd/Krawatte"
+  school_concert: "Polo-Shirts/Jeans/Sneakers"
+  baby_concert: "Polo-Shirts/Jeans/Sneakers"
+  gastspiel: "Schw. Anzug/weißes Hemd/Krawatte"
+  rehearsal: ""
+  default: ""
+
+# Bekannte Orte der SBP
+bekannte_orte:
+  - "DBA"
+  - "Bad Lausick"
+  - "Trebsen"
+  - "Oschatz"
+  - "Bad Düben"
+  - "Colditz"
+  - "Eilenburg"
+  - "Markkleeberg"
+  - "Mügeln"
+  - "Grimma"
+  - "Schkeuditz"
+  - "Naunhof"
+  - "Leipzig"
+  - "GWH"
+  - "Schildau"
+  - "Groitzsch"
+  - "Borna"
+  - "Delitzsch"
+  - "Torgau"
+  - "Wurzen"
+  - "Geithain"
+  - "Hohburg"
+  - "Lossatal"
+  - "Innsbruck"
+  - "New York"
+  - "Carnegie Hall"
+  - "Berlin"
+  - "Dresden"
+
+# Bekannte Dirigenten/Leiter
+bekannte_leiter:
+  - "Sommerer"
+  - "Loddgard"
+  - "Eichhorn"
+  - "Eicke"
+  - "Cascioli"
+  - "Gutierrez"
+  - "Foremny"
+  - "Lynch"
+  - "Kluttig"
+  - "Rainer"
+  - "Kahle"

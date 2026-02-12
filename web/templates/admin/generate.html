@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Dienstplan generieren — SBP Services{% endblock %}
+
+{% block content %}
+<div class="container container-narrow">
+    <div class="page-header">
+        <h1>Dienstplan generieren</h1>
+        <p class="subtitle">Jahresplan hochladen und Zeitraum waehlen</p>
+    </div>
+
+    {% if not lo_available %}
+    <div class="flash flash-warning">
+        LibreOffice ist nicht installiert. PDFs koennen nicht erstellt werden.
+        Word-Dateien werden trotzdem generiert.
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('admin.generate') }}" enctype="multipart/form-data" class="generate-form">
+        <!-- Datei-Upload -->
+        <div class="upload-zone" id="upload-zone">
+            <div class="upload-icon">&#128196;</div>
+            <p class="upload-text">Jahresplan (.xlsx) hierher ziehen</p>
+            <p class="upload-hint">oder klicken zum Auswaehlen</p>
+            <input type="file" name="jahresplan" id="jahresplan" accept=".xlsx" required>
+            <p class="upload-filename" id="filename-display"></p>
+        </div>
+
+        <!-- Zeitraum -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="start_date">Von</label>
+                <input type="date" id="start_date" name="start_date" value="2026-03-01" required>
+            </div>
+            <div class="form-group">
+                <label for="end_date">Bis</label>
+                <input type="date" id="end_date" name="end_date" value="2026-05-31" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-large" id="generate-btn">
+            Dienstplan generieren
+        </button>
+        <p class="form-hint">
+            Generiert den Gesamtplan + individuelle Plaene fuer alle 29 Musiker.
+            {% if lo_available %}Inkl. PDF-Konvertierung. {% endif %}
+            Dies kann einige Sekunden dauern.
+        </p>
+    </form>
+</div>
+
+<script>
+// Drag & Drop + Dateiname anzeigen
+const zone = document.getElementById('upload-zone');
+const input = document.getElementById('jahresplan');
+const display = document.getElementById('filename-display');
+const btn = document.getElementById('generate-btn');
+
+zone.addEventListener('click', () => input.click());
+zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+        input.files = e.dataTransfer.files;
+        display.textContent = e.dataTransfer.files[0].name;
+        zone.classList.add('has-file');
+    }
+});
+input.addEventListener('change', () => {
+    if (input.files.length) {
+        display.textContent = input.files[0].name;
+        zone.classList.add('has-file');
+    }
+});
+
+// Doppelklick-Schutz
+document.querySelector('.generate-form').addEventListener('submit', () => {
+    btn.disabled = true;
+    btn.textContent = 'Generiere...';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,143 @@
+# Personalbesetzung der Sächsischen Bläserphilharmonie
+# Stand: Spielzeit 2025/2026
+
+register:
+  Flöten:
+    gruppe: HOLZ
+    musiker:
+      - name: "Claudia Scheibe"
+        position: "Solo-Flöte"
+      - name: "Tobias Hemminger"
+        position: "Solo-Piccolo"
+        anteil: 50
+      - name: "Christine Rothe"
+        position: "Solo-Piccolo"
+        anteil: 50
+
+  Oboe:
+    gruppe: HOLZ
+    musiker:
+      - name: "Gunter Brauer"
+        position: "Solo-Oboe"
+        zusatz: "Konzertmeister"
+      - name: "vakant"
+        position: "2./1. Oboe"
+
+  Klarinetten:
+    gruppe: HOLZ
+    musiker:
+      - name: "Andreas Treffurth"
+        position: "Solo-Es-Klarinette"
+      - name: "Grigorios Vasileiadis"
+        position: "Solo-Klarinette"
+      - name: "Maksym Barabakh"
+        position: "Solo-Klarinette"
+      - name: "Bernhard Lindemann"
+        position: "2./3. Klarinette"
+      - name: "Elisa Weber"
+        position: "2./3. Klarinette"
+      - name: "Daniela Kohler"
+        position: "3./2. Klarinette"
+      - name: "René Schrödner"
+        position: "Solo-Bassklarinette"
+
+  Fagott:
+    gruppe: HOLZ
+    musiker:
+      - name: "Reiner Kugele"
+        position: "Solo-Fagott"
+      - name: "vakant"
+        position: "2./1. Fagott"
+
+  Trompeten:
+    gruppe: BLECH
+    musiker:
+      - name: "Sven Geipel"
+        position: "Solo-Trompete"
+      - name: "Björn Brünnich"
+        position: "2./4. Trompete"
+      - name: "Jakob Wagler"
+        position: "3./1. Trompete"
+      - name: "vakant"
+        position: "4./2. Trompete"
+
+  Posaunen:
+    gruppe: BLECH
+    musiker:
+      - name: "Wojciech Prokopowicz"
+        position: "Solo-Posaune"
+      - name: "Michael Peuker"
+        position: "stellv. Solo-Posaune"
+      - name: "vakant"
+        position: "3. Posaune"
+      - name: "Falk Meier"
+        position: "Solo-Bassposaune"
+
+  Hörner:
+    gruppe: BLECH
+    musiker:
+      - name: "Magnus Botzenhart"
+        position: "Solo-Horn"
+      - name: "Sven Rambow"
+        position: "2./4. Horn"
+      - name: "Lars Freytag"
+        position: "3./1. Horn"
+      - name: "Steffen Hamp"
+        position: "4./2. Horn"
+
+  Flügelhörner:
+    gruppe: BLECH
+    musiker:
+      - name: "Thomas Scheibe"
+        position: "Solo-Flügelhorn"
+      - name: "Linus Krimphove"
+        position: "2./1. Flügelhorn"
+
+  Schlagzeug:
+    gruppe: BLECH    # Spielt mit Brass zusammen
+    musiker:
+      - name: "vakant"
+        position: "Solo-Schlagzeug"
+
+# Kammerensembles — Mitgliedschaft per Position
+ensembles:
+  SBQ:
+    name: "Sächsisches Blechbläserquintett"
+    positionen:
+      - "Solo-Horn"
+      - "Solo-Posaune"
+      - "Solo-Flügelhorn"
+      - "Solo-Trompete"
+      - "Solo-Schlagzeug"
+
+  BLQ:
+    name: "Bläserquintett der Sächsischen Bläserphilharmonie"
+    positionen:
+      - "Solo-Es-Klarinette"
+      - "Solo-Fagott"
+      - "2./4. Horn"
+      - "Solo-Flöte"
+      - "Solo-Oboe"
+
+  SERENADEN:
+    name: "Serenaden-Ensemble"
+    positionen:
+      - "2./4. Horn"
+      - "Solo-Bassklarinette"
+      - "Solo-Es-Klarinette"
+      - "Solo-Fagott"
+      - "Solo-Flöte"
+      - "Solo-Oboe"
+      - "3./1. Horn"
+    # Wenn mehrere Musiker dieselbe Position haben → Name angeben
+    spezifisch:
+      "Solo-Klarinette": "Maksym Barabakh"
+
+  KLQ:
+    name: "Klarinettenquartett"
+    positionen:
+      - "Solo-Es-Klarinette"
+      - "Solo-Bassklarinette"
+    spezifisch:
+      "Solo-Klarinette": "Grigorios Vasileiadis"
+      "2./3. Klarinette": "Bernhard Lindemann"

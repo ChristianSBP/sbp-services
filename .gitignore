@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test / Cache
+.pytest_cache/
+.coverage
+
+# Instance data (database, uploads)
+instance/
+web/instance/
+
+# Generated files
+*.xlsx
+*.docx
+*.pdf
+!config/*.yaml
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Willkommen — SBP Services{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">Willkommen</h1>
+        <p class="auth-subtitle">Admin-Konto einrichten</p>
+
+        <form class="auth-form" method="POST" action="{{ url_for('auth.setup') }}">
+            <div class="form-group">
+                <label for="email">E-Mail</label>
+                <input type="email" id="email" name="email" value="{{ admin_email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort waehlen</label>
+                <input type="password" id="password" name="password" minlength="6" placeholder="Mindestens 6 Zeichen" required>
+            </div>
+            <div class="form-group">
+                <label for="password_confirm">Passwort bestaetigen</label>
+                <input type="password" id="password_confirm" name="password_confirm" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Konto erstellen</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

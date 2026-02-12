@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sbp-services
+    runtime: docker
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+    disk:
+      name: sbp-data
+      mountPath: /app/web/instance
+      sizeGB: 1

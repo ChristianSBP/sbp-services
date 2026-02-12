@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Login — SBP Services{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">Anmelden</h1>
+        <p class="auth-subtitle">SBP Interne Services</p>
+
+        <!-- Tab-Auswahl -->
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="admin" onclick="switchTab('admin')">Administration</button>
+            <button class="auth-tab" data-tab="musiker" onclick="switchTab('musiker')">Musiker</button>
+        </div>
+
+        <!-- Admin Login -->
+        <form id="form-admin" class="auth-form" method="POST" action="{{ url_for('auth.login') }}">
+            <input type="hidden" name="login_type" value="admin">
+            <div class="form-group">
+                <label for="email">E-Mail</label>
+                <input type="email" id="email" name="email" placeholder="name@sbphil.music" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Anmelden</button>
+        </form>
+
+        <!-- Musiker Login -->
+        <form id="form-musiker" class="auth-form hidden" method="POST" action="{{ url_for('auth.login') }}">
+            <input type="hidden" name="login_type" value="musiker">
+            <div class="form-group">
+                <label for="musiker_password">Musiker-Passwort</label>
+                <input type="password" id="musiker_password" name="musiker_password" placeholder="Passwort eingeben" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Zugang Dienstplaene</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+    document.getElementById('form-admin').classList.toggle('hidden', tab !== 'admin');
+    document.getElementById('form-musiker').classList.toggle('hidden', tab !== 'musiker');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ musician.display_name }} — SBP Services{% endblock %}
+
+{% block content %}
+<div class="container container-narrow">
+    <a href="{{ url_for('musiker.dashboard') }}" class="back-link">&lsaquo; Zurueck zur Uebersicht</a>
+
+    <div class="page-header">
+        <h1>{{ musician.display_name }}</h1>
+        <p class="subtitle">{{ musician.position }}</p>
+    </div>
+
+    <div class="download-cards">
+        <!-- Individueller Dienstplan -->
+        <div class="card download-card">
+            <div class="card-icon">&#128196;</div>
+            <h2>Individueller Dienstplan</h2>
+            <p class="card-info text-secondary">
+                Persoenlicher Plan fuer
+                {{ generated_plan.plan_start.strftime('%d.%m.') }} &ndash; {{ generated_plan.plan_end.strftime('%d.%m.%Y') }}
+            </p>
+            {% if musician.pdf_data %}
+            <a href="{{ url_for('musiker.download_individual_pdf', plan_id=musician.id) }}" class="btn btn-primary btn-full">
+                PDF herunterladen
+            </a>
+            {% else %}
+            <p class="text-secondary">PDF nicht verfuegbar.</p>
+            {% endif %}
+        </div>
+
+        <!-- Kollektiver Dienstplan -->
+        <div class="card download-card">
+            <div class="card-icon">&#128209;</div>
+            <h2>Gesamtdienstplan</h2>
+            <p class="card-info text-secondary">
+                Kollektiver Dienstplan aller Formationen fuer
+                {{ generated_plan.plan_start.strftime('%d.%m.') }} &ndash; {{ generated_plan.plan_end.strftime('%d.%m.%Y') }}
+            </p>
+            {% if generated_plan.collective_pdf %}
+            <a href="{{ url_for('musiker.download_collective_pdf', plan_id=musician.id) }}" class="btn btn-secondary btn-full">
+                PDF herunterladen
+            </a>
+            {% else %}
+            <p class="text-secondary">PDF nicht verfuegbar.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
