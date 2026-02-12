@@ -93,11 +93,45 @@ register:
       - name: "Linus Krimphove"
         position: "2./1. Flügelhorn"
 
-  Schlagzeug:
+  Tenorhörner:
+    gruppe: BLECH
+    musiker:
+      - name: "Clément Goy"
+        position: "Solo-Tenorhorn"
+      - name: "Clément Couty"
+        position: "2./1. Tenorhorn"
+
+  Bariton:
+    gruppe: BLECH
+    musiker:
+      - name: "Léo Puzenat"
+        position: "Solo-Bariton"
+
+  Tuben:
+    gruppe: BLECH
+    musiker:
+      - name: "Michael Nestler"
+        position: "Solo-F-Tuba"
+      - name: "Ricardo Mosquera"
+        position: "B-Tuba"
+
+  Kontrabass:
+    gruppe: BLECH    # Spielt bei Brass-Formationen mit
+    musiker:
+      - name: "Stephan Kleuver"
+        position: "Solo-Kontrabass"
+
+  Schlagwerk:
     gruppe: BLECH    # Spielt mit Brass zusammen
     musiker:
-      - name: "vakant"
+      - name: "René Geipel"
         position: "Solo-Schlagzeug"
+      - name: "Sebastian Linz"
+        position: "Schlagzeug"
+      - name: "Arno Appel"
+        position: "Solo-Pauke"
+      - name: "vakant"
+        position: "stellv. Solo-Pauke"
 
 # Kammerensembles — Mitgliedschaft per Position
 ensembles:
