@@ -8,7 +8,3 @@ services:
         generateValue: true
       - key: FLASK_ENV
         value: production
-    disk:
-      name: sbp-data
-      mountPath: /app/web/instance
-      sizeGB: 1
