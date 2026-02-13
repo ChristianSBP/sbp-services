@@ -1,11 +1,22 @@
+databases:
+  - name: sbp-db
+    plan: free
+    databaseName: sbp_planung
+
 services:
   - type: web
     name: sbp-services
     runtime: docker
     plan: free
-    healthCheckPath: /healthz
+    healthCheckPath: /api/healthz
     envVars:
       - key: SECRET_KEY
         generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
       - key: FLASK_ENV
         value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sbp-db
+          property: connectionString

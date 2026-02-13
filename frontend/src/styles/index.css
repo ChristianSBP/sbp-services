@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* Apple-Style Design System fuer SBP Planung */
+
+@theme {
+  --color-primary: #1D1D1F;
+  --color-secondary: #6E6E73;
+  --color-accent: #0071E3;
+  --color-accent-hover: #0077ED;
+  --color-bg: #FBFBFD;
+  --color-card: #FFFFFF;
+  --color-border: #D2D2D7;
+  --color-success: #34C759;
+  --color-warning: #FF9F0A;
+  --color-error: #FF3B30;
+
+  /* Formation-Farben */
+  --color-sbp: #0071E3;
+  --color-brass: #FF9F0A;
+  --color-blq: #34C759;
+  --color-klq: #5856D6;
+  --color-sbq: #FF2D55;
+  --color-serenaden: #AF52DE;
+
+  /* Status-Farben */
+  --color-fest: #1D1D1F;
+  --color-geplant: #6E6E73;
+  --color-moeglich: #AEAEB2;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Frosted glass header */
+.glass-header {
+  background: rgba(251, 251, 253, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Pill buttons (Apple-style) */
+.btn-pill {
+  border-radius: 980px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: scale(1.02);
+}
+
+/* Cards */
+.card {
+  background: var(--color-card);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* Status badges */
+.badge-fest { background-color: var(--color-fest); color: white; }
+.badge-geplant { background-color: var(--color-geplant); color: white; }
+.badge-moeglich { background-color: var(--color-moeglich); color: white; }
+
+/* Formation badges */
+.badge-sbp { background-color: var(--color-sbp); color: white; }
+.badge-brass { background-color: var(--color-brass); color: white; }
+.badge-blq { background-color: var(--color-blq); color: white; }
+.badge-klq { background-color: var(--color-klq); color: white; }
+.badge-sbq { background-color: var(--color-sbq); color: white; }
+.badge-serenaden { background-color: var(--color-serenaden); color: white; }
+
+/* Dienste-Auslastung Bars */
+.bar-ok { background-color: var(--color-success); }
+.bar-warning { background-color: var(--color-warning); }
+.bar-error { background-color: var(--color-error); }
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-secondary); }

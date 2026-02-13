@@ -24,12 +24,17 @@ env/
 # Instance data (database, uploads)
 instance/
 web/instance/
+api/instance/
 
 # Generated files
 *.xlsx
 *.docx
 *.pdf
 !config/*.yaml
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
 
 # OS
 .DS_Store
