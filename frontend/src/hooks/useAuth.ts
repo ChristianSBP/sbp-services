@@ -23,12 +23,23 @@ export function useAuth(): AuthState & {
   const [error, setError] = useState<string | null>(null);
   const [needsSetup, setNeedsSetup] = useState(false);
 
-  // Auth-Status pruefen
+  // Auth-Status pruefen + gespeicherten Token validieren
   useEffect(() => {
     authAPI.status().then((res) => {
       setNeedsSetup(!res.data.admin_exists);
     }).catch(() => {});
-  }, []);
+
+    // Wenn Token vorhanden, pruefen ob er noch gueltig ist
+    if (token) {
+      authAPI.me().catch(() => {
+        // Token ungueltig (DB zurueckgesetzt, abgelaufen, etc.)
+        localStorage.removeItem("sbp_token");
+        localStorage.removeItem("sbp_user");
+        setToken(null);
+        setUser(null);
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const login = useCallback(
     async (type: "admin" | "musiker", email: string, password: string) => {

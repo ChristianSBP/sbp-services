@@ -18,14 +18,19 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Bei 401 automatisch ausloggen
+// Bei 401 automatisch ausloggen (Token abgelaufen / ungueltig)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("sbp_token");
-      localStorage.removeItem("sbp_user");
-      window.location.href = "/login";
+      // Nur ausloggen bei geschuetzten Requests (nicht bei Login-Versuch)
+      const url = error.config?.url || "";
+      if (!url.includes("/auth/login") && !url.includes("/auth/setup")) {
+        localStorage.removeItem("sbp_token");
+        localStorage.removeItem("sbp_user");
+        // Kein Redirect — React State sorgt fuer Login-Anzeige
+        window.location.reload();
+      }
     }
     return Promise.reject(error);
   }
