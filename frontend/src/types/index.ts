@@ -156,3 +156,27 @@ export const STATUS_COLORS: Record<EventStatus, string> = {
   geplant: "#6E6E73",
   moeglich: "#AEAEB2",
 };
+
+/* Farb-Mapping fuer Dienst-Typen (Kalender-Dots) */
+export const DIENST_TYPE_COLORS: Record<string, string> = {
+  "Konzert": "#0071E3",
+  "Abo-Konzert": "#0071E3",
+  "SK": "#5856D6",
+  "Babykonzert": "#AF52DE",
+  "Gastspiel": "#007AFF",
+  "Probe": "#34C759",
+  "GP": "#30D158",
+  "HP": "#34C759",
+  "Anspielprobe": "#63E6BE",
+  "Dirigierkurs": "#FF9F0A",
+  "Podcast": "#FF6B35",
+  "Tonaufnahme": "#FF6B35",
+  "Akademiedienst": "#FF9F0A",
+  "Reise": "#8E8E93",
+  "RZA": "#8E8E93",
+  "Urlaub": "#AEAEB2",
+  "Frei": "#AEAEB2",
+  "Dienstberatung": "#6E6E73",
+  "Probespiel": "#FF2D55",
+  "Sonstiges": "#6E6E73",
+};

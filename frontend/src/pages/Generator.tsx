@@ -51,7 +51,15 @@ export default function Generator() {
       const detailRes = await generatorAPI.plan(plan.id);
       setSelectedPlan(detailRes.data as GeneratedPlan);
     } catch (err: unknown) {
-      setError((err as { response?: { data?: { error?: string } } })?.response?.data?.error || "Generierung fehlgeschlagen.");
+      const apiError = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      const errMsg = (err as { message?: string })?.message || "";
+      const isTimeout = errMsg.includes("timeout") || errMsg.includes("Network Error") || !apiError;
+      if (isTimeout && !apiError) {
+        setError("Die Generierung hat zu lange gedauert (Server-Timeout). Auf dem Free-Tier hat der Server ein 30s Limit. " +
+                 "Tipp: Einen kürzeren Zeitraum wählen oder ein bezahltes Hosting nutzen.");
+      } else {
+        setError(apiError || "Generierung fehlgeschlagen.");
+      }
     } finally {
       setGenerating(false);
     }

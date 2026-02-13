@@ -89,7 +89,7 @@ export const musiciansAPI = {
 /* Generator */
 export const generatorAPI = {
   generate: (data: { season_id: number; start_date: string; end_date: string }) =>
-    api.post("/generator/generate", data),
+    api.post("/generator/generate", data, { timeout: 300000 }), // 5 Minuten Timeout
   plans: () => api.get("/generator/plans"),
   plan: (id: number) => api.get(`/generator/plans/${id}`),
 };
